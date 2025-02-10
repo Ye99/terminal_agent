@@ -151,8 +151,11 @@ def user_approval(state: AgentState) -> AgentState:
     print(output)
     state["output"] = output
     
-    if input("\nDo you want to analyze the output? (y/n): ").strip().lower() == 'y':
+    analyze_choice = input("\nDo you want to analyze the output or provide additional instructions? (y/n): ").strip().lower()
+    if analyze_choice == 'y':
+        custom_prompt = input("Enter your question or instructions about the output: ").strip()
         state["messages"].append(AIMessage(content=f"Command output: {output}"))
+        state["messages"].append(HumanMessage(content=custom_prompt))
         state["next"] = "linux_expert"
     else:
         # Clear messages to start fresh with new input
